@@ -1,20 +1,19 @@
-import React, { Component } from 'react';
+import React, { Component } from "react"
 import ItemList from '../itemList/itemList';
-import CharDetails , {Field} from '../charDetails/charDetails';
-import ErrorMessage from '../errorMessage/errorMessage'
+import CharDetails, {Field} from '../charDetails/charDetails';
 import gotService from '../../services/gotService';
 import RowBlock from '../../components/rowBlock/rowBlock';
+import ErrorMessage from '../errorMessage/errorMessage'
 
-
-export default class characterPage extends Component {
+export default class housesPage extends Component {
   gotService = new gotService();
   state = {
-    selectedChar: 130,
+    selectedHouse: null,
     error: false
   }
   onCharSelected= (id) => {
     this.setState({
-        selectedChar: id
+      selectedHouse: id
      })
   }
   componentDidCatch(){
@@ -22,7 +21,6 @@ export default class characterPage extends Component {
         error: true
     })
   }
-
   render() {
     if(this.state.error) {
       return <ErrorMessage/> 
@@ -30,15 +28,16 @@ export default class characterPage extends Component {
   const itemList = (
     <ItemList 
       onCharSelected={this.onCharSelected} 
-      getData={this.gotService.getAllCharacters}
+      getData={this.gotService.getAllHouses}
       renderItem={(item) => `${item.name} (${item.gender})`}/>
   )
   const charDetails = (
-    <CharDetails charId={this.state.selectedChar}>
-      <Field field="gender" label="Gender" />
-      <Field field="born" label="Born" />
-      <Field field="died" label="Died" />
-      <Field field="culture" label="Culture" />
+    <CharDetails 
+    charId={this.state.selectedHouse}
+    getData={this.gotService.getHouses}>
+      <Field field="numberOfPages" label="Number Of Pages" />
+      <Field field="publisher" label="Publisher" />
+      <Field field="released" label="Released" />
     </CharDetails>
   )
     return (
@@ -48,3 +47,4 @@ export default class characterPage extends Component {
     )
   }
 }
+
