@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import {Col, Row} from 'reactstrap';
 import ItemList from '../itemList/itemList';
-import CharDetails from '../charDetails/charDetails';
+import CharDetails , {Field} from '../charDetails/charDetails';
 import ErrorMessage from '../errorMessage/errorMessage'
+import gotService from '../../services/gotService';
+import RowBlock from '../../components/rowBlock/rowBlock';
+
 
 export default class characterPage extends Component {
+  gotService = new gotService();
   state = {
     selectedChar: 130,
     error: false
@@ -24,15 +27,24 @@ export default class characterPage extends Component {
     if(this.state.error) {
       return <ErrorMessage/> 
   }
+  const itemList = (
+    <ItemList 
+      onCharSelected={this.onCharSelected} 
+      getData={this.gotService.getAllCharacters}
+      renderItem={(item) => `${item.name} (${item.gender})`}/>
+  )
+  const charDetails = (
+    <CharDetails charId={this.state.selectedChar}>
+    <Field field="gender" label="Gender" />
+    <Field field="born" label="Born" />
+    <Field field="died" label="Died" />
+    <Field field="culture" label="Culture" />
+    </CharDetails>
+  )
     return (
-      <Row>
-        <Col md='6'>
-            <ItemList onCharSelected={this.onCharSelected} />
-        </Col>
-        <Col md='6'>
-            <CharDetails charId={this.state.selectedChar} />
-        </Col>
-      </Row>
+      <RowBlock 
+        left={itemList} 
+        right={charDetails}/>
     )
   }
 }

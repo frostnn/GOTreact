@@ -4,13 +4,17 @@ import Header from '../header/header';
 import RandomChar from '../randomChar/randomChar';
 import ErrorMessage from '../../components/errorMessage/errorMessage'
 import CharacterPage from '../characterPage/characterPage'
-
+import ItemList from '../itemList/itemList';
+import CharDetails from '../charDetails/charDetails';
+import gotService from '../../services/gotService';
 export default class App extends Component {
+    gotService = new gotService();
     state = {
         showRandomChar: true,
         error: false
     }
 
+  
   
     toggleShowRandomChar = () => {
         this.setState({
@@ -34,10 +38,36 @@ export default class App extends Component {
                     <Row>
                         <Col lg={{size: 5, offset: 0}}>
                             {randomChar}
-                            <button onClick={this.toggleShowRandomChar}>Show random Character</button>
+                            <button 
+                            onClick={this.toggleShowRandomChar} 
+                            className="btn btn-secondary"
+                            style={{marginBottom: 40, marginLeft: 120}}>
+                            Show random Character</button>
                         </Col>
                     </Row>
                     <CharacterPage/>
+                    <Row>
+                    <Col md='6'>
+                        <ItemList 
+                        onCharSelected={this.onCharSelected} 
+                        getData={this.gotService.getAllBooks}
+                        />
+                    </Col>
+                    <Col md='6'>
+                        <CharDetails charId={this.state.selectedChar} />
+                    </Col>
+                  </Row>
+                  <Row>
+                  <Col md='6'>
+                      <ItemList 
+                      onCharSelected={this.onCharSelected} 
+                      getData={this.gotService.getAllHouses}
+                     />
+                  </Col>
+                  <Col md='6'>
+                      <CharDetails charId={this.state.selectedChar} />
+                  </Col>
+                </Row>
                 </Container>
             </>
         );
